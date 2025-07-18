@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ระบบจัดการงานไอที</title>
+    <link rel="stylesheet" href="adminstyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Flatpickr CSS for Date Range Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <div class="page-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="โลโก้ หอภาพยนต์.png" alt="IT Service Logo" class="logo-admin-panel" id="adminPanelLogo">
+                <div class="system-title-admin-panel" id="adminPanelTitle">Admin Panel</div>
+            </div>
+            <div class="menu-section">
+                <h6>เมนูผู้ดูแลระบบ</h6>
+                <a href="#" class="menu-item active" id="dashboardMenuItem" data-section="dashboardSection">
+                    <i class="fa-solid fa-tachometer-alt fa-fw icon-dashboard"></i>
+                    <span>ภาพรวมระบบ</span>
+                </a>
+                <a href="#" class="menu-item" id="repairRequestsMenuItem" data-section="repairRequestsSection">
+                    <i class="fa-solid fa-screwdriver-wrench fa-fw icon-repair"></i>
+                    <span>จัดการคำขอซ่อม</span>
+                </a>
+                <a href="#" class="menu-item" id="borrowRequestsMenuItem" data-section="borrowRequestsSection">
+                    <i class="fa-solid fa-handshake-angle fa-fw icon-borrow"></i>
+                    <span>จัดการคำขอยืม-คืน</span>
+                </a>
+                <a href="#" class="menu-item" id="generalRequestsMenuItem" data-section="generalRequestsSection">
+                    <i class="fa-solid fa-clipboard-list fa-fw icon-withdraw"></i>
+                    <span>จัดการคำขอเบิก</span>
+                </a>
+                <a href="#" class="menu-item" id="deviceManagementMenuItem" data-section="deviceManagementSection">
+                    <i class="fa-solid fa-desktop fa-fw icon-device"></i>
+                    <span>จัดการรายการอุปกรณ์</span>
+                </a>
+                <a href="#" class="menu-item" id="categoryManagementMenuItem" data-section="categoryManagementSection">
+                    <i class="fa-solid fa-tags fa-fw icon-category"></i>
+                    <span>จัดการหมวดหมู่</span>
+                </a>
+                <a href="#" class="menu-item" id="userManagementMenuItem" data-section="userManagementSection">
+                    <i class="fa-solid fa-users-cog fa-fw icon-users"></i>
+                    <span>จัดการผู้ใช้งาน</span>
+                </a>
+                <a href="#" class="menu-item" id="historyMenuItem" data-section="historySection">
+                    <i class="fa-solid fa-file-invoice fa-fw icon-history"></i>
+                    <span>รายงานและประวัติ</span>
+                </a>
+                <a href="#" class="menu-item" id="settingsMenuItem" data-section="settingsSection">
+                    <i class="fa-solid fa-cog fa-fw icon-settings"></i>
+                    <span>การตั้งค่า</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <h1 class="page-title" id="pageTitle">ภาพรวมระบบ</h1>
+                <div class="header-actions">
+                    <div class="search-container">
+                        <i class="fa-solid fa-search search-icon"></i>
+                        <input type="text" placeholder="ค้นหาในหน้านี้..." class="search-box" id="globalSearchInput">
+                    </div>
+                    <div class="user-profile">
+                         <button class="theme-toggle-button desktop-theme-toggle">
+                            <i class="fa-solid fa-sun"></i>
+                        </button>
+                        <div class="user-info">
+                            <div class="user-name">Admin</div>
+                            <div class="user-role">ผู้ดูแลระบบ</div>
+                        </div>
+                        <div class="user-avatar">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <div class="section-container active" id="dashboardSection">
+                <div class="stat-cards six-cards">
+                    <div class="stat-card color-new-today">
+                        <div class="icon-circle"><i class="fa-solid fa-file-circle-plus"></i></div>
+                        <div class="info">
+                            <div class="title">งานใหม่วันนี้</div>
+                            <div class="value" id="newTasksTodayCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card color-pending">
+                        <div class="icon-circle"><i class="fa-solid fa-hourglass-start"></i></div>
+                        <div class="info">
+                            <div class="title">คำขอรอดำเนินการ</div>
+                            <div class="value" id="pendingRequestsCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card color-in-progress">
+                        <div class="icon-circle"><i class="fa-solid fa-person-digging"></i></div>
+                        <div class="info">
+                            <div class="title">อยู่ระหว่างดำเนินการ</div>
+                            <div class="value" id="inProgressCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card color-external-repair">
+                         <div class="icon-circle"><i class="fa-solid fa-truck-fast"></i></div>
+                         <div class="info">
+                            <div class="title">ส่งซ่อมภายนอก</div>
+                            <div class="value" id="externalRepairCount">0</div>
+                        </div>
+                    </div>
+                     <div class="stat-card color-low-stock">
+                        <div class="icon-circle"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        <div class="info">
+                            <div class="title">อุปกรณ์เหลือน้อย</div>
+                            <div class="value" id="lowStockCount">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card color-completed">
+                        <div class="icon-circle"><i class="fa-solid fa-check-circle"></i></div>
+                        <div class="info">
+                            <div class="title">เสร็จสิ้นแล้ว</div>
+                            <div class="value" id="completedCount">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-data-section">
+                    <div class="data-section-header">
+                        <h3>รายการแจ้งซ่อมล่าสุด</h3>
+                    </div>
+                    <div class="data-table-container neumorphic-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>เลขที่</th>
+                                    <th>ผู้แจ้ง</th>
+                                    <th>หัวข้อ</th>
+                                    <th>สถานะ</th>
+                                    <th>ผู้รับผิดชอบ</th>
+                                    <th>วันที่แจ้ง</th>
+                                    <th>การดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="latestRepairTableBody" data-request-type="แจ้งซ่อม">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container" id="latestRepairPagination"></div>
+                </div>
+    
+                <div class="dashboard-data-section">
+                    <div class="data-section-header">
+                        <h3>รายการยืม-คืนล่าสุด</h3>
+                    </div>
+                    <div class="data-table-container neumorphic-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>เลขที่</th>
+                                    <th>ผู้ยืม</th>
+                                    <th>อุปกรณ์</th>
+                                    <th>สถานะ</th>
+                                    <th>ผู้รับผิดชอบ</th>
+                                    <th>วันที่ยืม</th>
+                                    <th>กำหนดคืน</th>
+                                    <th>การดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="latestBorrowTableBody" data-request-type="ยืม-คืนอุปกรณ์">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container" id="latestBorrowPagination"></div>
+                </div>
+    
+                <div class="dashboard-data-section">
+                    <div class="data-section-header">
+                        <h3>รายการเบิกอุปกรณ์ล่าสุด</h3>
+                    </div>
+                    <div class="data-table-container neumorphic-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>เลขที่</th>
+                                    <th>ผู้เบิก</th>
+                                    <th>อุปกรณ์</th>
+                                    <th>สถานะ</th>
+                                    <th>ผู้รับผิดชอบ</th>
+                                    <th>วันที่เบิก</th>
+                                    <th>การดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="latestWithdrawTableBody" data-request-type="เบิกอุปกรณ์">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container" id="latestWithdrawPagination"></div>
+                </div>
+            </div>
+
+            <!-- Repair Requests Section -->
+            <div class="section-container" id="repairRequestsSection">
+                <div class="section-header">
+                    <h2>จัดการคำขอซ่อม</h2>
+                </div>
+                <div class="filters">
+                    <select id="repairStatusFilter" class="filter-select">
+                        <option value="">สถานะทั้งหมด</option>
+                        <option value="รอดำเนินการ">รอดำเนินการ</option>
+                        <option value="อยู่ระหว่างดำเนินการ">อยู่ระหว่างดำเนินการ</option>
+                        <option value="ส่งซ่อมภายนอก">ส่งซ่อมภายนอก</option>
+                        <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+                    </select>
+                    <select id="repairAssigneeFilter" class="filter-select">
+                        <option value="">ผู้รับผิดชอบทั้งหมด</option>
+                    </select>
+                     <select id="repairCategoryFilter" class="filter-select">
+                        <option value="">หมวดหมู่ทั้งหมด</option>
+                    </select>
+                </div>
+                <div class="data-table-container neumorphic-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>เลขที่</th>
+                                <th>ผู้แจ้ง</th>
+                                <th>หมวดหมู่</th>
+                                <th>อาการ</th>
+                                <th>สถานะ</th>
+                                <th>ผู้รับผิดชอบ</th>
+                                <th>วันที่แจ้ง</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="repairRequestsTableBody" data-request-type="แจ้งซ่อม">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Borrow Requests Section -->
+            <div class="section-container" id="borrowRequestsSection">
+                <div class="section-header">
+                    <h2>จัดการคำขอยืม-คืน</h2>
+                </div>
+                <div class="filters">
+                     <select id="borrowStatusFilter" class="filter-select">
+                        <option value="">สถานะทั้งหมด</option>
+                        <option value="รออนุมัติ">รออนุมัติ</option>
+                        <option value="อนุมัติแล้ว">อนุมัติแล้ว</option>
+                        <option value="คืนแล้ว">คืนแล้ว</option>
+                        <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+                        <option value="ยกเลิก">ยกเลิก</option>
+                    </select>
+                    <select id="borrowAssigneeFilter" class="filter-select">
+                        <option value="">ผู้รับผิดชอบทั้งหมด</option>
+                    </select>
+                </div>
+                 <div class="data-table-container neumorphic-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>เลขที่</th>
+                                <th>ผู้ยืม</th>
+                                <th>อุปกรณ์</th>
+                                <th>สถานะ</th>
+                                <th>ผู้รับผิดชอบ</th>
+                                <th>วันที่ยืม</th>
+                                <th>กำหนดคืน</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="borrowRequestsTableBody" data-request-type="ยืม-คืนอุปกรณ์">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- General Requests Section (Withdraw) -->
+            <div class="section-container" id="generalRequestsSection">
+                 <div class="section-header">
+                    <h2>จัดการคำขอเบิกอุปกรณ์</h2>
+                 </div>
+                <div class="filters">
+                    <select id="generalStatusFilter" class="filter-select">
+                        <option value="">สถานะทั้งหมด</option>
+                        <option value="รออนุมัติ">รออนุมัติ</option>
+                        <option value="อนุมัติแล้ว">อนุมัติแล้ว</option>
+                        <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+                        <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+                        <option value="ยกเลิก">ยกเลิก</option>
+                    </select>
+                    <select id="generalAssigneeFilter" class="filter-select">
+                        <option value="">ผู้รับผิดชอบทั้งหมด</option>
+                    </select>
+                </div>
+                <div class="data-table-container neumorphic-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>เลขที่</th>
+                                <th>ผู้เบิก</th>
+                                <th>อุปกรณ์</th>
+                                <th>สถานะ</th>
+                                <th>ผู้รับผิดชอบ</th>
+                                <th>วันที่เบิก</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="generalRequestsTableBody" data-request-type="เบิกอุปกรณ์">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Device Management Section -->
+            <div class="section-container" id="deviceManagementSection">
+                <div class="section-header">
+                    <h2>จัดการรายการอุปกรณ์</h2>
+                    <button class="add-button" id="addNewDeviceBtn"><i class="fa-solid fa-plus"></i> เพิ่มอุปกรณ์ใหม่</button>
+                </div>
+                <div class="device-layout-container">
+                    <div class="device-column">
+                        <div class="column-header">
+                            <h4><i class="fa-solid fa-handshake-angle"></i> อุปกรณ์สำหรับยืม-คืน</h4>
+                        </div>
+                        <div class="device-card-grid" id="borrowDeviceCardContainer">
+                        </div>
+                    </div>
+            
+                    <div class="device-column">
+                         <div class="column-header">
+                            <h4><i class="fa-solid fa-dolly"></i> อุปกรณ์สำหรับเบิก</h4>
+                        </div>
+                        <div class="device-card-grid" id="withdrawDeviceCardContainer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category Management Section -->
+            <div class="section-container" id="categoryManagementSection">
+                <div class="section-header">
+                    <h2>จัดการหมวดหมู่งานซ่อม</h2>
+                    <button class="add-button" id="addNewCategoryBtn"><i class="fa-solid fa-plus"></i> เพิ่มหมวดหมู่ใหม่</button>
+                </div>
+                <div class="data-table-container neumorphic-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ชื่อหมวดหมู่</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <div class="section-container" id="userManagementSection">
+                <div class="section-header">
+                    <h2>จัดการผู้ใช้งาน</h2>
+                </div>
+                <div class="data-table-container neumorphic-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ชื่อ-นามสกุล</th>
+                                <th>อีเมล</th>
+                                <th>ฝ่าย</th>
+                                <th>ตำแหน่ง</th>
+                                <th>สิทธิ์การใช้งาน</th>
+                                <th>เปลี่ยนสิทธิ์</th>
+                                <th>การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userManagementTableBody">
+                            <!-- User data will be rendered here by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- History & Reports Section -->
+            <div class="section-container" id="historySection">
+                <div class="section-header">
+                    <h2>รายงานและประวัติทั้งหมด</h2>
+                    <div class="header-actions">
+                         <button class="add-button" id="printHistoryBtn"><i class="fa-solid fa-print"></i> พิมพ์รายงาน</button>
+                    </div>
+                </div>
+                <div class="filters">
+                    <select id="historyTypeFilter" class="filter-select">
+                        <option value="">ทุกประเภท</option>
+                        <option value="แจ้งซ่อม">แจ้งซ่อม</option>
+                        <option value="ยืม-คืนอุปกรณ์">ยืม-คืนอุปกรณ์</option>
+                        <option value="เบิกอุปกรณ์">เบิกอุปกรณ์</option>
+                    </select>
+                    <select id="historyStatusFilter" class="filter-select">
+                        <option value="">ทุกสถานะ</option>
+                    </select>
+                    <input type="text" id="historyDateFilter" class="filter-select" placeholder="เลือกช่วงวันที่">
+                </div>
+                <div class="data-table-container neumorphic-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>เลขที่</th>
+                                <th>ประเภท</th>
+                                <th>หัวข้อ/อุปกรณ์</th>
+                                <th>ผู้แจ้ง</th>
+                                <th>สถานะ</th>
+                                <th>วันที่</th>
+                                <th>รายละเอียดเพิ่มเติม</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="section-container" id="settingsSection">
+                <h2>การตั้งค่า</h2>
+                <div class="settings-card neumorphic-card">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>เปิดการแจ้งเตือนทางอีเมล</h5>
+                            <p>ส่งอีเมลแจ้งเตือนเมื่อมีคำขอใหม่หรือมีการอัปเดตสถานะ</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" disabled>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>กำหนดผู้รับผิดชอบอัตโนมัติ</h5>
+                            <p>มอบหมายงานซ่อมในหมวดหมู่ที่กำหนดให้กับผู้ดูแลโดยอัตโนมัติ</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" disabled>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h5>ส่งออกข้อมูลเป็น Excel</h5>
+                            <p>ส่งออกรายงานคำขอทั้งหมดเป็นไฟล์ .xlsx</p>
+                        </div>
+                        <button class="add-button" disabled><i class="fa-solid fa-file-export"></i> ส่งออก</button>
+                    </div>
+                </div>
+                <p class="settings-notice">หมายเหตุ: ฟังก์ชันการตั้งค่ากำลังอยู่ในระหว่างการพัฒนา</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="viewRequestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="viewRequestTitle">รายละเอียดคำขอ #</h5>
+                <button class="close-button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- ========== START: โค้ดที่แก้ไข ========== -->
+                <div class="detail-grid">
+                    <div class="detail-item"><strong>เลขที่คำขอ:</strong> <span id="viewRequestId"></span></div>
+                    <div class="detail-item"><strong>ผู้แจ้ง:</strong> <span id="viewRequestRequester"></span></div>
+                    <div class="detail-item"><strong>เบอร์ติดต่อ:</strong> <span id="viewRequestContact"></span></div>
+                    <div class="detail-item"><strong>วันที่แจ้ง:</strong> <span id="viewRequestDate"></span></div>
+                    <div class="detail-item"><strong>ประเภท:</strong> <span id="viewRequestType"></span></div>
+                    <div class="detail-item"><strong>สถานะ:</strong> <span id="viewRequestStatus"></span></div>
+                    <div class="detail-item" style="grid-column: 1 / -1;"><strong>ผู้รับผิดชอบ:</strong> <span id="viewRequestAssignee"></span></div>
+                </div>
+                <!-- ========== END: โค้ดที่แก้ไข ========== -->
+                <div class="detail-full-width">
+                    <div class="detail-item"><strong>หัวข้อ/อุปกรณ์:</strong> <span id="viewRequestSubject"></span></div>
+                </div>
+                
+                <div class="detail-full-width" id="viewDeviceListSection" style="display: none;">
+                    <div class="detail-item">
+                        <strong>อุปกรณ์ในคำขอ:</strong>
+                        <div id="viewDeviceListContainer" class="view-device-list-container">
+                            <!-- Device images will be rendered here by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-full-width">
+                    <div class="detail-item"><strong>รายละเอียด:</strong> <p id="viewRequestDescription"></p></div>
+                </div>
+                 <div class="detail-full-width">
+                    <div class="detail-item"><strong>รูปภาพประกอบ:</strong> <img id="viewRequestImage" class="request-image-thumbnail" src="#" alt="Request Image" style="display: none;"></div>
+                </div>
+                <div class="detail-full-width" id="viewPartsReplacedSection" style="display: none;">
+                    <div class="detail-item">
+                        <strong>อะไหล่ที่เปลี่ยน:</strong>
+                        <ul id="viewPartsReplacedList"></ul>
+                        <div class="parts-total-cost"><strong>ราคารวม:</strong> <span id="viewTotalPartCost">0</span> บาท</div>
+                    </div>
+                </div>
+                <div class="detail-full-width">
+                    <div class="detail-item"><strong>บันทึกผู้ดูแล:</strong> <p id="viewAdminNotes"></p></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cancel-button">ปิด</button>
+                <button type="button" class="submit-button" id="editFromViewModalBtn">แก้ไข</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editRequestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="editModalTitle">แก้ไขคำขอ #</h5>
+                <button class="close-button">&times;</button>
+            </div>
+            <form id="editRequestForm">
+                <input type="hidden" id="editRequestId" name="id">
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="editRequestRequester">ผู้แจ้ง</label>
+                            <input type="text" id="editRequestRequester" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="editRequestDate">วันที่แจ้ง</label>
+                            <input type="text" id="editRequestDate" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="editRequestTypeSelect">ประเภทคำขอ</label>
+                            <input type="text" id="editRequestTypeSelect" required disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="editRequestSubject">หัวข้อ/อุปกรณ์</label>
+                            <input type="text" id="editRequestSubject" required disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRequestDescription">รายละเอียด</label>
+                        <textarea id="editRequestDescription" rows="3" required disabled></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="editRequestStatus">สถานะ</label>
+                            <select id="editRequestStatus" required>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editRequestAssignee">ผู้รับผิดชอบ</label>
+                            <select id="editRequestAssignee" required>
+                                <option value="ยังไม่ได้มอบหมาย">ยังไม่ได้มอบหมาย</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminNotes">บันทึกจากผู้ดูแล</label>
+                        <textarea id="adminNotes" rows="3" placeholder="เช่น อะไหล่กำลังมา, รอการอนุมัติ..."></textarea>
+                    </div>
+
+                    <div id="partsReplacementSection" style="display: none;">
+                        <hr class="form-divider">
+                        <div class="section-header-inline">
+                            <h5><i class="fa-solid fa-cogs"></i> อะไหล่ที่เปลี่ยน</h5>
+                            <button type="button" class="add-button-small" id="addPartBtn"><i class="fa-solid fa-plus"></i> เพิ่มรายการ</button>
+                        </div>
+                        <div id="partsListContainer" class="neumorphic-card">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="delete-button" id="deleteRequestBtn">ลบคำขอ</button>
+                    <button type="submit" class="submit-button">บันทึกการเปลี่ยนแปลง</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="partModal" class="modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h5 id="partModalTitle">เพิ่มรายการอะไหล่</h5>
+                <button class="close-button">&times;</button>
+            </div>
+            <form id="partForm">
+                <input type="hidden" id="partIndex">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="partName">ชื่ออะไหล่</label>
+                        <input type="text" id="partName" placeholder="เช่น RAM, Harddisk" required>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="partQuantity">จำนวน</label>
+                            <input type="number" id="partQuantity" value="1" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="partPrice">ราคาต่อหน่วย (บาท)</label>
+                            <input type="number" id="partPrice" value="0" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-button">ยกเลิก</button>
+                    <button type="submit" class="submit-button">บันทึกรายการ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="categoryModalTitle">เพิ่มหมวดหมู่ใหม่</h5>
+                <button class="close-button">&times;</button>
+            </div>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="categoryName">ชื่อหมวดหมู่</label>
+                        <input type="text" id="categoryName" placeholder="เช่น คอมพิวเตอร์, เครือข่าย" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-button">ยกเลิก</button>
+                    <button type="submit" class="submit-button">บันทึก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="deviceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="deviceModalTitle">เพิ่มอุปกรณ์ใหม่</h5>
+                <button class="close-button">&times;</button>
+            </div>
+            <form id="deviceForm">
+                <input type="hidden" id="deviceId">
+                <div class="modal-body">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="deviceName">ชื่ออุปกรณ์</label>
+                            <input type="text" id="deviceName" placeholder="เช่น Laptop, Projector" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="deviceBrand">ยี่ห้อ/รุ่น</label>
+                            <input type="text" id="deviceBrand" placeholder="เช่น Dell XPS 15">
+                        </div>
+                        <div class="form-group">
+                            <label for="deviceAvailable">จำนวน</label>
+                            <input type="number" id="deviceAvailable" placeholder="5" required min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="deviceType">ประเภทอุปกรณ์</label>
+                            <select id="deviceType" required>
+                                <option value="borrow">สำหรับยืม-คืน</option>
+                                <option value="withdraw">สำหรับเบิก</option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label for="deviceImageFile">รูปภาพอุปกรณ์ (ถ้ามี)</label>
+                        <input type="file" id="deviceImageFile" accept="image/*">
+                        <img id="deviceImagePreview" src="#" alt="Image Preview" style="display: none; max-width: 200px; margin-top: 10px; border-radius: 10px;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-button">ยกเลิก</button>
+                    <button type="submit" class="submit-button">บันทึก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="editUserModal" class="modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h5 id="editUserModalTitle">แก้ไขข้อมูลผู้ใช้</h5>
+                <button class="close-button">&times;</button>
+            </div>
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId" name="user_id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editUserFullname">ชื่อ-นามสกุล</label>
+                        <input type="text" id="editUserFullname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editUserEmail">อีเมล (ไม่สามารถแก้ไขได้)</label>
+                        <input type="email" id="editUserEmail" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="editUserDepartment">ฝ่าย</label>
+                        <input type="text" id="editUserDepartment">
+                    </div>
+                    <div class="form-group">
+                        <label for="editUserPosition">ตำแหน่ง</label>
+                        <input type="text" id="editUserPosition">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-button">ยกเลิก</button>
+                    <button type="submit" class="submit-button">บันทึกการเปลี่ยนแปลง</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="customAlertConfirmModal" class="modal custom-alert-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="customAlertConfirmTitle"></h5>
+            </div>
+            <div class="modal-body">
+                <p id="customAlertConfirmMessage"></p>
+            </div>
+            <div class="modal-footer" id="customAlertConfirmFooter"></div>
+        </div>
+    </div>
+
+    <div id="imageLightboxModal" class="modal image-lightbox">
+        <span class="close-lightbox-button">&times;</span>
+        <img class="lightbox-content" id="lightboxImage">
+        <div id="lightboxCaption"></div>
+    </div>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="adminscript.js"></script>
+</body>
+</html>

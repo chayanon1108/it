@@ -1,0 +1,263 @@
+/* login_style.css (ฉบับสมบูรณ์ ปรับปรุงระยะห่าง และเพิ่ม Alert) */
+
+/* --- 1. ROOT & THEME VARIABLES --- */
+:root {
+    --font-primary: 'Sarabun', sans-serif;
+    --color-background: #F0F2F5;
+    --color-surface: #FFFFFF;
+    --color-text-primary: #344054;
+    --color-text-secondary: #667085;
+    --color-accent-blue: #2970FF;
+    --color-accent-red: #F04438;
+    --color-accent-green: #12B76A;
+    --shadow-light: 6px 6px 12px rgba(0, 0, 0, 0.08), -6px -6px 12px rgba(255, 255, 255, 1);
+    --shadow-inset: inset 4px 4px 8px rgba(0, 0, 0, 0.05), inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+    --border-radius-lg: 14px;
+    --transition-ease: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* --- 2. GLOBAL STYLES --- */
+body {
+    font-family: var(--font-primary);
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* --- 3. AUTHENTICATION CONTAINER & CARD --- */
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.auth-wrapper {
+    width: 100%;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.auth-wrapper.hidden {
+    display: none;
+}
+
+.auth-card {
+    background-color: var(--color-surface);
+    padding: 40px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-light);
+    text-align: center;
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.auth-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--color-text-primary);
+}
+
+.auth-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 30px;
+}
+
+.message-box {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    display: none; /* ซ่อนไว้ก่อนปกติ */
+    text-align: left;
+}
+.message-box.success {
+    background-color: rgba(18, 183, 106, 0.1);
+    color: var(--color-accent-green);
+    display: block;
+}
+.message-box.error {
+    background-color: rgba(240, 68, 56, 0.1);
+    color: var(--color-accent-red);
+    display: block;
+}
+
+
+/* --- 4. FORM ELEMENTS --- */
+#login-form, #register-form, #forgot-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px; 
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 14px 14px 45px;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--color-background);
+    box-shadow: var(--shadow-inset);
+    color: var(--color-text-primary);
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: var(--transition-ease);
+}
+
+.input-group input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(41, 112, 255, 0.2);
+}
+
+.auth-button {
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-ease);
+    background-color: var(--color-accent-blue);
+    color: white;
+    box-shadow: 0 4px 12px rgba(41, 112, 255, 0.2);
+    margin-top: 10px;
+}
+
+.auth-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(41, 112, 255, 0.3);
+}
+
+/* --- 5. SWITCH LINK & OPTIONS --- */
+.auth-switch {
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.auth-switch a {
+    color: var(--color-accent-blue);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+.form-options {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -8px;
+    margin-bottom: 10px;
+}
+
+.forgot-password-link {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.forgot-password-link:hover {
+    color: var(--color-accent-blue);
+    text-decoration: underline;
+}
+
+/* ===== START: โค้ดที่เพิ่มเข้ามาสำหรับ Custom Alert Modal ===== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(34, 40, 54, 0.3);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background-color: var(--color-surface);
+    padding: 30px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-light);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header h5 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: var(--color-text-primary);
+}
+
+.modal-body p {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin: 0 0 25px 0;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+/* ===== END: โค้ดที่เพิ่มเข้ามาสำหรับ Custom Alert Modal ===== */

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - ระบบแจ้งซ่อม IT</title>
+    <link rel="stylesheet" href="login_style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- ===== START: Login Wrapper ===== -->
+        <div class="auth-wrapper" id="login-wrapper">
+            <div class="auth-card">
+                <img src="โลโก้ หอภาพยนต์.png" alt="Logo" class="auth-logo">
+                <h2 class="auth-title">เข้าสู่ระบบแจ้งซ่อม</h2>
+                <p class="auth-subtitle">กรุณากรอกข้อมูลเพื่อเข้าใช้งานระบบ</p>
+                <form id="login-form">
+                    <div id="login-message-box" class="message-box"></div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="login-email" placeholder="อีเมล" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="รหัสผ่าน" required>
+                    </div>
+                    <div class="form-options">
+                        <a href="#" class="forgot-password-link" id="show-forgot-password">ลืมรหัสผ่าน?</a>
+                    </div>
+                    <button type="submit" class="auth-button">เข้าสู่ระบบ</button>
+                </form>
+                <p class="auth-switch">ยังไม่มีบัญชี? <a href="#" id="show-register">สมัครสมาชิกที่นี่</a></p>
+            </div>
+        </div>
+        <!-- ===== END: Login Wrapper ===== -->
+
+        <!-- ===== START: Register Wrapper ===== -->
+        <div class="auth-wrapper hidden" id="register-wrapper">
+            <div class="auth-card">
+                <img src="โลโก้ หอภาพยนต์.png" alt="Logo" class="auth-logo">
+                <h2 class="auth-title">สมัครสมาชิกใหม่</h2>
+                <p class="auth-subtitle">กรอกข้อมูลเพื่อสร้างบัญชีผู้ใช้ใหม่</p>
+                <form id="register-form">
+                    <div id="register-message-box" class="message-box"></div>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="register-fullname" placeholder="ชื่อ-นามสกุล" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-building"></i>
+                        <input type="text" id="register-department" placeholder="ฝ่าย" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-briefcase"></i>
+                        <input type="text" id="register-position" placeholder="งาน" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-phone"></i>
+                        <input type="text" id="register-contact" placeholder="เบอร์ติดต่อ / เบอร์ภายใน" required>
+                    </div>
+                     <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="register-email" placeholder="อีเมล (สำหรับใช้ Login)" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="register-password" placeholder="ตั้งรหัสผ่าน (ไม่เกิน 8 ตัวอักษร)" required maxlength="8">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="register-password-confirm" placeholder="ยืนยันรหัสผ่าน" required maxlength="8">
+                    </div>
+                    <button type="submit" class="auth-button">สมัครสมาชิก</button>
+                </form>
+                <p class="auth-switch">มีบัญชีอยู่แล้ว? <a href="#" class="show-login-link">กลับไปหน้าเข้าสู่ระบบ</a></p>
+            </div>
+        </div>
+        <!-- ===== END: Register Wrapper ===== -->
+
+        <!-- ===== START: Forgot Password Wrapper ===== -->
+        <div class="auth-wrapper hidden" id="forgot-password-wrapper">
+            <div class="auth-card">
+                <img src="โลโก้ หอภาพยนต์.png" alt="Logo" class="auth-logo">
+                <h2 class="auth-title">ตั้งรหัสผ่านใหม่</h2>
+                <p class="auth-subtitle">กรอกอีเมลและตั้งรหัสผ่านใหม่ของคุณ</p>
+                <form id="forgot-password-form">
+                    <div id="forgot-message-box" class="message-box"></div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="forgot-email" placeholder="อีเมลที่ใช้ลงทะเบียน" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="new-password" placeholder="รหัสผ่านใหม่ (ไม่เกิน 8 ตัวอักษร)" required maxlength="8">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirm-new-password" placeholder="ยืนยันรหัสผ่านใหม่" required maxlength="8">
+                    </div>
+                    <button type="submit" class="auth-button">ตั้งรหัสผ่านใหม่</button>
+                </form>
+                <p class="auth-switch"><a href="#" class="show-login-link">กลับไปหน้าเข้าสู่ระบบ</a></p>
+            </div>
+        </div>
+        <!-- ===== END: Forgot Password Wrapper ===== -->
+    </div>
+
+    <!-- ===== START: Custom Alert Modal (โค้ดใหม่ทั้งหมด) ===== -->
+    <div id="customAlertModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="customAlertTitle"></h5>
+            </div>
+            <div class="modal-body">
+                <p id="customAlertMessage"></p>
+            </div>
+            <div class="modal-footer" id="customAlertFooter">
+                <!-- Buttons will be added by JS -->
+            </div>
+        </div>
+    </div>
+    <!-- ===== END: Custom Alert Modal ===== -->
+
+    <script src="login_script.js"></script>
+</body>
+</html>
